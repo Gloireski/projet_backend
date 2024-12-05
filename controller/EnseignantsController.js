@@ -4,7 +4,7 @@ class EnseignantsController {
     static async getAll (req, res){
         let enseignant;
         try {
-            enseignant = await Enseignant.findAll();
+            enseignant = await Enseignant.fifndAll();
         } catch(e) {
             console.error(e);
         }

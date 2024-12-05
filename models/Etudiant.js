@@ -1,14 +1,16 @@
 const { sequelize } = require('../config/db');
 const { DataTypes } = require('sequelize');
+const Classe = require('./Classe');
 
 const Etudiant = sequelize.define(
     'Etudiant',
     {
         // Model attributes are defined here
         id: {
-            type: DataTypes.UUID,
-            // autoIncrement: true,
-            defaultValue: DataTypes.UUIDV4,
+            // type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            // defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         nom: {
@@ -27,11 +29,23 @@ const Etudiant = sequelize.define(
             type: DataTypes.STRING,
             // allowNull defaults to true
         },
-        // class_id: {
-        //     type: DataTypes.UUID,
-        //     // allowNull defaults to true
-        // },
+        classe_id: {
+            type: DataTypes.INTEGER,
+            references: {
+              model: Classe,
+              key: "id"
+            }
+        },
+    },
+    {
+      tableName: 'etudiants',
+      timestamps: false 
     }
 );
+
+// Etudiant.belongsTo(Classe, {
+//   foreignKey: 'classe_id',
+//   targetKey: 'id'
+// });
 
 module.exports = Etudiant;

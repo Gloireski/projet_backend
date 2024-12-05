@@ -1,4 +1,3 @@
-// const { Where } = require("sequelize/types/lib/utils");
 const { Classe } = require("../models");
 const { Etudiant } = require("../models");
 const { Enseignant } = require("../models");
@@ -16,41 +15,50 @@ class ClassesController {
     }
 
     static async getMe (req, res) {
-        let classes;
+        let classe;
         const { id } = req.params;
+
         try {
-            classes = await Classe.findOne({ where: { id: id }});
-            if (!classes) {
-                return (res.status(404).send('Classes not found'));
+            classe = await Classe.findOne({ 
+                where: { id: id },
+                include: [
+                    {
+                        model: Enseignant,
+                        as: 'enseignant_principal', // Alias de la relation
+                        attributes: ['id', 'nom', 'prenom', 'matiere', 'email'] // On inclut les infos de l'enseignant
+                    },
+                    {
+                        model: Etudiant,
+                        as: 'etudiants', // Alias de la relation
+                        attributes: ['id', 'nom', 'prenom', 'email', 'age'] // On inclut les infos des étudiants
+                    }
+                ]
+            });
+
+            // classe = await Classe.findOne({ 
+            //     where: { id: id },});
+            // const cls = Classe.findOne();
+            // console.log((await classe.getEnseignant())?.toJSON());
+
+
+
+            if (!classe) {
+                return res.status(404).json({ message: 'Classes not found' });
             }
-        } catch(e) {
-            console.error(e);
-        }
 
-        let enseignant;
-        try {
-            // result = await Classe.findOne({ where: { id: id }, include: {Enseignant} });
-            enseignant= await Enseignant.findOne({ Where: {id: classes.enseignant_principal_id}});
-        } catch(e) {
-            console.error(e);
-        }
+            res.status(200).json(classe);
 
-        let etudiants;
-        try {
-            // result = await Classe.findOne({ where: { id: id }, include: {Enseignant} });
-            enseignant= await Etudiant.findAll({ Where: {classe_id: id}});
         } catch(e) {
             console.error(e);
+            res.status(500).json({ message: 'Erreur du serveur' });
         }
-       
-        res.status(200).json({classes, enseignant, etudiants});
     }
 
     static async postNew (req, res){
         let classes;
         const { nom } = req.body;
         const { niveau } = req.body;
-        const enseignant_principal_id = req.body.enseignant_principal_id ? req.body.enseignant_principal_id : null;
+        // const enseignant_principal_id = req.body.enseignant_principal_id ? req.body.enseignant_principal_id : null;
 
         classes = await Classe.findOne({ where: { nom, niveau} });
         // const { class_id } = req.body;
@@ -62,7 +70,7 @@ class ClassesController {
             classes = await Classe.create({
                 nom,
                 niveau,
-                enseignant_principal_id,
+                // enseignant_principal_id,
             });
         } catch(e) {
             console.error(e);
@@ -91,13 +99,13 @@ class ClassesController {
         classes.update({
             nom,
             niveau,
-            enseignant_principal_id
+            enseignant_principal_id: parseInt(enseignant_principal_id)
         })
 
         res.status(200).json({
             nom,
             niveau,
-            enseignant_principal_id
+            enseignant_principal_id: parseInt(enseignant_principal_id)
         });
 
     }

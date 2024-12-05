@@ -6,7 +6,7 @@ const validClassesFields = require('../utils/validClassesFields');
 
 
 router.get('/', ClassesController.getAll);
-router.get('/:id', ClassesController.getMe)
+router.get('/:id/details', ClassesController.getMe)
 router.post('/', validClassesFields, ClassesController.postNew);
 router.put('/:id', validClassesFields, ClassesController.edit);
 router.delete('/:id', ClassesController.delete);

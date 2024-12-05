@@ -1,5 +1,4 @@
 const { Etudiant } = require("../models");
-
 class EtudiantsController {
     static async getAll (req, res){
         let etudiants;
@@ -33,7 +32,7 @@ class EtudiantsController {
         const { prenom } = req.body;
         const { age } = req.body;
         const { email } = req.body;
-        const {class_id} = req.body.class_id;
+        // const {  class_id } = req.body.class_id? req.body.class_id : '';
 
         etudiant = await Etudiant.findOne({ where: { nom, prenom, age, email } });
         // const { class_id } = req.body;
@@ -47,7 +46,6 @@ class EtudiantsController {
                 prenom,
                 age: parseInt(age),
                 email,
-                class_id
             });
         } catch(e) {
             console.error(e);
@@ -71,26 +69,25 @@ class EtudiantsController {
         const { prenom } = req.body;
         const { age } = req.body;
         const { email } = req.body;
-        const class_id = req.body.class_id ? class_id : null;
+        const { classe_id } = req.body;
         
-        console.log(class_id)
+        console.log(classe_id)
 
         etudiant.update({
             nom,
             prenom,
             age,
             email,
-            class_id
+            classe_id: parseInt(classe_id)
         })
-
+        etudiant.save();
         res.status(200).json({
             nom,
             prenom,
             age,
             email,
-            class_id
+            classe_id: parseInt(classe_id)
         });
-
     }
 
     static async deleteEtud(req, res){

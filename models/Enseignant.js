@@ -6,9 +6,9 @@ const Enseignant = sequelize.define(
     {
         // Model attributes are defined here
         id: {
-            type: DataTypes.UUID,
-            // autoIncrement: true,
-            defaultValue: DataTypes.UUIDV4,
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            // defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         nom: {
@@ -29,6 +29,11 @@ const Enseignant = sequelize.define(
             type: DataTypes.STRING,
             // allowNull defaults to true
         },
+        // timestamps: false
+    },
+    {
+        tableName: 'enseignants',
+        timestamps: false
     }
 );
 
