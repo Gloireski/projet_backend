@@ -6,7 +6,8 @@ const Classe = sequelize.define(
     {
         id: {
             type: DataTypes.UUID,
-            autoIncrement: true,
+            // autoIncrement: true,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
         nom: {
