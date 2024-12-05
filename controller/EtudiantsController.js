@@ -33,6 +33,7 @@ class EtudiantsController {
         const { prenom } = req.body;
         const { age } = req.body;
         const { email } = req.body;
+        const {class_id} = req.body.class_id;
 
         etudiant = await Etudiant.findOne({ where: { nom, prenom, age, email } });
         // const { class_id } = req.body;
@@ -46,7 +47,7 @@ class EtudiantsController {
                 prenom,
                 age: parseInt(age),
                 email,
-                // class_id
+                class_id
             });
         } catch(e) {
             console.error(e);
@@ -70,21 +71,24 @@ class EtudiantsController {
         const { prenom } = req.body;
         const { age } = req.body;
         const { email } = req.body;
+        const class_id = req.body.class_id ? class_id : null;
         
-        console.log(id)
+        console.log(class_id)
 
         etudiant.update({
             nom,
             prenom,
             age,
-            email
+            email,
+            class_id
         })
 
         res.status(200).json({
             nom,
             prenom,
             age,
-            email
+            email,
+            class_id
         });
 
     }
@@ -98,13 +102,13 @@ class EtudiantsController {
                 return (res.status(404).send("Etudiant does not exist"));
             }
     
-            await etudiant.destroy({ where: {id}});
-            return(res.status(204));
+            etudiant.destroy({ where: {id}});
+            return(res.status(204).send("deleted"));
         } catch(e){
             console.error(e)
-            return(res.status(500));
+            return(res.status(500).send("erreur"));
         }
-        
+    
     }
 }
 

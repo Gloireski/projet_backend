@@ -4,8 +4,8 @@ const Enseignant = require('./Enseignant');
 const CLasse = require('./Classe');
 const Classe = require('./Classe');
 
-Etudiant.belongsTo(Classe, { foreignKey: 'classe_id' });
-Classe.belongsTo(Classe, { foreignKey: 'enseignant_principal_id'});
+Etudiant.belongsTo(Classe, { foreignKey: 'classe_id'});
+Classe.belongsTo(Enseignant, { foreignKey: 'enseignant_principal_id'});
 
 sequelize.sync({ force: true })
     .then(() => {

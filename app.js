@@ -10,6 +10,8 @@ app.use(express.json());
 
 app.use('/', indexRouter);
 app.use('/etudiants', etudiantsRouter);
+app.use('/enseignants',enseignantsRouter);
+app.use('/classes', classesRouter);
 
 module.exports =  app ;
 // module.exports = { port };
